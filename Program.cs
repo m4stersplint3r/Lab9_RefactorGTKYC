@@ -28,10 +28,6 @@ namespace Lab8_GetToKnowYourClassmates
                 {
                     searchMethod = ChooseSearchMethod();
                 }
-                else if (searchOrAdd == "add")
-                {
-                    AddStudent(students);
-                }
 
                 if (searchMethod == "student number")
                 {
@@ -297,11 +293,25 @@ namespace Lab8_GetToKnowYourClassmates
                 Console.Write("Please enter the students favorite food: ");
                 food = Console.ReadLine(); 
             } while (food.Length == 0);
-            for (int i = 0; i < students.Count; i++)
+            for (int i = 0; i <= students.Count; i++)
             {
-                char firstLetterAdding = name.Substring(0).ToLower().ToString().ToCharArray()[0];
-                char firstLetterList = students[i].Name.ToLower()[0].ToString().ToCharArray()[0];
-                Console.WriteLine(students.Count);
+                char firstLetterAdding;
+                char firstLetterList;
+                indexAddPosition = students.Count - offset;
+                // gets the first character of the name being added and the first character of each student name in the list and compares to determine index to insert new student
+                // reason for the try catch, if you enter a student that would be added at the end of the list, you would reach an ArgumentOutOfRangeException, if you reach this the student should be added to the end of the list.
+                try
+                {
+                    firstLetterAdding = name.Substring(0).ToLower().ToString().ToCharArray()[0];
+                    firstLetterList = students[i].Name.ToLower()[0].ToString().ToCharArray()[0];
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    indexAddPosition = i;
+                    students.Insert(i, new StudentInfo(name, color, hometown, food));
+                    break;
+                }
+                // comparing the start characters, if the firstLetterList is greater than firstLetterAdding it means that the letter comes after EX: firstLetterList = C firstLetterAdding = A
                 if(firstLetterList >= firstLetterAdding)
                 {
                     indexAddPosition = i;
